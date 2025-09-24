@@ -1,16 +1,76 @@
-# React + Vite
+# React HTTP Methods Lab
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React application demonstrating CRUD operations (Create, Read, Update, Delete) using HTTP methods with JSONPlaceholder API.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **GET** - Fetch and display posts from API
+- **POST** - Create new posts with a form
+- **PUT** - Edit existing posts in-place
+- **DELETE** - Remove posts with confirmation
+- **Error Handling** - User-friendly error messages
+- **Loading States** - Loading indicators during API calls
 
-## React Compiler
+## Technologies Used
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 18
+- Vite
+- Axios (HTTP client)
+- JSONPlaceholder API (mock REST API)
 
-## Expanding the ESLint configuration
+## Project Structure
+```
+src/
+├── components/
+│   ├── CreatePostForm.jsx    # Form for creating new posts
+│   ├── EditPostForm.jsx      # Form for editing existing posts
+│   └── PostList.jsx          # Displays list of posts with CRUD actions
+├── services/
+│   └── api.js                # API configuration and HTTP methods
+└── App.jsx                   # Main component with state management
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## Available Scripts
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## API Endpoints Used
+
+- `GET /posts` - Fetch all posts
+- `POST /posts` - Create new post
+- `PUT /posts/:id` - Update specific post
+- `DELETE /posts/:id` - Delete specific post
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Start development server: `npm run dev`
+4. Open [http://localhost:5173](http://localhost:5173) in your browser
+
+## Learnings
+
+This project demonstrates:
+- HTTP methods implementation in React
+- API integration with Axios
+- State management for CRUD operations
+- Error handling and loading states
+- Component composition and prop drilling
+- Form handling in React
+
+## Note
+
+This uses JSONPlaceholder API, which is a fake API for testing. Data changes are simulated and not persisted on the server.

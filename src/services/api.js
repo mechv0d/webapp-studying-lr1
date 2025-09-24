@@ -18,4 +18,10 @@ export const createPost = async (postData) => {
     return response.data; // JSONPlaceholder вернет объект с новым постом, включая сгенерированный ID
 };
 
+// put request
+export const updatePost = async (postId, postData) => {
+    const response = await apiClient.put(`/posts/${postId}`, postData);
+    return response.data; 
+};
+
 export default apiClient;

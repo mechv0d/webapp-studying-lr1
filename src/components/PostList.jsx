@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react';
-import {getPosts, deletePost} from '../services/api';
+import { useState, useEffect } from 'react';
+import { getPosts, deletePost } from '../services/api';
 import EditPostForm from './EditPostForm';
 
-const PostList = ({posts, setPosts}) => {
+const PostList = ({ posts, setPosts, onError }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [editingPostId, setEditingPostId] = useState(null);
 
@@ -14,20 +14,18 @@ const PostList = ({posts, setPosts}) => {
                 setPosts(postsData);
             } catch (error) {
                 console.error('Ошибка при загрузке постов:', error);
+                onError('Не удалось загрузить посты. Проверьте консоль (если желаете)');
             } finally {
                 setIsLoading(false);
             }
         };
 
         if (posts.length === 0) {
-            fetchPosts().then(() => {
-            });
+            fetchPosts().then(() => {});
         } else {
             setIsLoading(false);
         }
-    }, [setPosts, posts.length]);
-
-    // region Edit Func
+    }, [setPosts, posts.length, onError]);
 
     const handleEditClick = (postId) => {
         setEditingPostId(postId);
@@ -38,17 +36,13 @@ const PostList = ({posts, setPosts}) => {
     };
 
     const handlePostUpdated = (updatedPost) => {
-        // update in local state
         setPosts((prevPosts) =>
             prevPosts.map((post) =>
                 post.id === updatedPost.id ? updatedPost : post
             )
         );
-        // exit editing mode
         setEditingPostId(null);
     };
-
-    // endregion
 
     const handleDeleteClick = async (postId) => {
         if (!window.confirm('Вы уверены, что хотите удалить этот пост?')) {
@@ -58,12 +52,10 @@ const PostList = ({posts, setPosts}) => {
         try {
             await deletePost(postId);
             console.log('Пост удален:', postId);
-
             setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
-
         } catch (error) {
             console.error('Ошибка при удалении поста:', error);
-            alert('Не удалось удалить пост. Проверьте консоль (если желаете)');
+            onError('Не удалось удалить пост. Проверьте консоль (если желаете)');
         }
     };
 
@@ -75,12 +67,13 @@ const PostList = ({posts, setPosts}) => {
         <div>
             <h1>Список постов</h1>
             {posts.map((post) => (
-                <div key={post.id} style={{border: '1px solid #ccc', margin: '10px', padding: '10px'}}>
+                <div key={post.id} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
                     {editingPostId === post.id ? (
                         <EditPostForm
                             post={post}
                             onPostUpdated={handlePostUpdated}
                             onCancel={handleCancelEdit}
+                            onError={onError}
                         />
                     ) : (
                         <>
@@ -92,7 +85,7 @@ const PostList = ({posts, setPosts}) => {
                                 </button>
                                 <button
                                     onClick={() => handleDeleteClick(post.id)}
-                                    style={{marginLeft: '10px', backgroundColor: '#ff6b6b', color: 'white'}}
+                                    style={{ marginLeft: '10px', backgroundColor: '#ff6b6b', color: 'white' }}
                                 >
                                     Удалить
                                 </button>

@@ -13,7 +13,6 @@ function App() {
         setError(null);
     };
 
-    // 3. Функция для отображения ошибок
     const showError = (errorMessage) => {
         setError(errorMessage);
         setTimeout(() => setError(null), 5000);

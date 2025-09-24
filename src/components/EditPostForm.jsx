@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { updatePost } from '../services/api';
 
-const EditPostForm = ({ post, onPostUpdated, onCancel }) => {
+const EditPostForm = ({ post, onPostUpdated, onCancel, onError }) => {
     const [title, setTitle] = useState(post.title);
     const [body, setBody] = useState(post.body);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // update form if post changed
     useEffect(() => {
         setTitle(post.title);
         setBody(post.body);
@@ -16,7 +15,7 @@ const EditPostForm = ({ post, onPostUpdated, onCancel }) => {
         e.preventDefault();
 
         if (!title.trim() || !body.trim()) {
-            alert('Пожалуйста, заполните все поля.');
+            onError('Пожалуйста, заполните все поля.');
             return;
         }
 
@@ -31,13 +30,11 @@ const EditPostForm = ({ post, onPostUpdated, onCancel }) => {
 
             const updatedPost = await updatePost(post.id, updatedPostData);
             console.log('Пост обновлен:', updatedPost);
-
-            // yeah, callback
             onPostUpdated(updatedPost);
 
         } catch (error) {
             console.error('Ошибка при обновлении поста:', error);
-            alert('Не удалось обновить пост. Проверьте консоль для деталей.');
+            onError('Не удалось обновить пост. Проверьте консоль (если желаете)');
         } finally {
             setIsSubmitting(false);
         }

@@ -1,45 +1,38 @@
 import { useState } from 'react';
 import { createPost } from '../services/api';
 
-const CreatePostForm = ({ onPostCreated }) => {
+const CreatePostForm = ({ onPostCreated, onError }) => { // props onError
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
-
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // prevent page reloading
+        e.preventDefault();
 
-        // validation damn
         if (!title.trim() || !body.trim()) {
-            alert('Пожалуйста, заполните все поля.');
+            onError('Пожалуйста, заполните все поля.'); // using onError instead of alert
             return;
         }
 
         setIsSubmitting(true);
 
         try {
-            // data to send
             const newPostData = {
                 title: title,
                 body: body,
-                userId: 1, // TODO: implement users
+                userId: 1,
             };
 
-            // call func
             const createdPost = await createPost(newPostData);
             console.log('Пост создан:', createdPost);
 
-            // callback shit
             onPostCreated(createdPost);
-
-            // clear form
             setTitle('');
             setBody('');
 
         } catch (error) {
             console.error('Ошибка при создании поста:', error);
-            alert('Не удалось создать пост. Проверьте консоль (если желаете)');
+            onError('Не удалось создать пост. Проверьте консоль для деталей.'); // using onError
         } finally {
             setIsSubmitting(false);
         }

@@ -1,28 +1,29 @@
 import { useState, useEffect } from 'react';
-import { getPosts } from '../services/api'; // Импортируем нашу функцию
+import { getPosts } from '../services/api';
 
-const PostList = () => {
-    // state to archive posts
-    const [posts, setPosts] = useState([]);
-    // state for loading
+// receiving posts and setPosts from App.jsx
+const PostList = ({ posts, setPosts }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
                 setIsLoading(true);
-                const postsData = await getPosts(); 
+                const postsData = await getPosts();
                 setPosts(postsData);
             } catch (error) {
                 console.error('Ошибка при загрузке постов:', error);
-                // TODO: add error states
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchPosts().then(() => {});
-    }, []);
+        if (posts.length === 0) {
+            fetchPosts().then(() => {});
+        } else {
+            setIsLoading(false);
+        }
+    }, [setPosts, posts.length]);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -35,6 +36,7 @@ const PostList = () => {
                 <div key={post.id} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
                     <h3>{post.title}</h3>
                     <p>{post.body}</p>
+                    {/* TODO: edit and delete buttons here */}
                 </div>
             ))}
         </div>

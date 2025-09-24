@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+
+form {
+  padding: 22px;
+  border-radius: 24px;
+}

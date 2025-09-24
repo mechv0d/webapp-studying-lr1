@@ -67,7 +67,7 @@ const PostList = ({ posts, setPosts, onError }) => {
         <div>
             <h1>Список постов</h1>
             {posts.map((post) => (
-                <div key={post.id} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
+                <div key={post.id} className="post">
                     {editingPostId === post.id ? (
                         <EditPostForm
                             post={post}
@@ -85,7 +85,7 @@ const PostList = ({ posts, setPosts, onError }) => {
                                 </button>
                                 <button
                                     onClick={() => handleDeleteClick(post.id)}
-                                    style={{ marginLeft: '10px', backgroundColor: '#ff6b6b', color: 'white' }}
+                                    className={"delete-button"}
                                 >
                                     Удалить
                                 </button>

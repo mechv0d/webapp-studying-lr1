@@ -39,7 +39,7 @@ const CreatePostForm = ({ onPostCreated, onError }) => { // props onError
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ border: '1px solid #eee', padding: '20px', marginBottom: '20px' }}>
+        <form onSubmit={handleSubmit}>
             <h2>Создать новый пост</h2>
             <div>
                 <label htmlFor="title">Заголовок: </label>

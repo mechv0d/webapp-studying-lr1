@@ -5,21 +5,38 @@ import CreatePostForm from './components/CreatePostForm';
 import './App.css';
 
 function App() {
-    // POSTS ONLY HERE!!!
     const [posts, setPosts] = useState([]);
+    const [error, setError] = useState(null);
 
     const handlePostCreated = (newPost) => {
-        // JSONPlaceholder doesn't save real data, but returns an object with ID.
-        // we will add new post at the beginning of our posts
         setPosts((prevPosts) => [newPost, ...prevPosts]);
+        setError(null);
+    };
+
+    // 3. Функция для отображения ошибок
+    const showError = (errorMessage) => {
+        setError(errorMessage);
+        setTimeout(() => setError(null), 5000);
     };
 
     return (
         <div className="App">
+            {/* show error if we have any */}
+            {error && (
+                <div style={{
+                    backgroundColor: '#ffebee',
+                    color: '#c62828',
+                    padding: '10px',
+                    margin: '10px 0',
+                    border: '1px solid #ef5350',
+                    borderRadius: '4px'
+                }}>
+                    ⚠️ {error}
+                </div>
+            )}
 
-            <CreatePostForm onPostCreated={handlePostCreated} />
-
-            <PostList posts={posts} setPosts={setPosts} />
+            <CreatePostForm onPostCreated={handlePostCreated} onError={showError} />
+            <PostList posts={posts} setPosts={setPosts} onError={showError} />
         </div>
     );
 }

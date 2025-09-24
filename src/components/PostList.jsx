@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { getPosts } from '../services/api';
+import {useEffect, useState} from 'react';
+import {getPosts, deletePost} from '../services/api';
 import EditPostForm from './EditPostForm';
 
-const PostList = ({ posts, setPosts }) => {
+const PostList = ({posts, setPosts}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [editingPostId, setEditingPostId] = useState(null);
 
@@ -20,7 +20,8 @@ const PostList = ({ posts, setPosts }) => {
         };
 
         if (posts.length === 0) {
-            fetchPosts().then(() => {});
+            fetchPosts().then(() => {
+            });
         } else {
             setIsLoading(false);
         }
@@ -49,6 +50,23 @@ const PostList = ({ posts, setPosts }) => {
 
     // endregion
 
+    const handleDeleteClick = async (postId) => {
+        if (!window.confirm('Вы уверены, что хотите удалить этот пост?')) {
+            return;
+        }
+
+        try {
+            await deletePost(postId);
+            console.log('Пост удален:', postId);
+
+            setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+
+        } catch (error) {
+            console.error('Ошибка при удалении поста:', error);
+            alert('Не удалось удалить пост. Проверьте консоль (если желаете)');
+        }
+    };
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -57,7 +75,7 @@ const PostList = ({ posts, setPosts }) => {
         <div>
             <h1>Список постов</h1>
             {posts.map((post) => (
-                <div key={post.id} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
+                <div key={post.id} style={{border: '1px solid #ccc', margin: '10px', padding: '10px'}}>
                     {editingPostId === post.id ? (
                         <EditPostForm
                             post={post}
@@ -68,10 +86,17 @@ const PostList = ({ posts, setPosts }) => {
                         <>
                             <h3>{post.title}</h3>
                             <p>{post.body}</p>
-                            <button onClick={() => handleEditClick(post.id)}>
-                                Редактировать
-                            </button>
-                            {/* TODO: add delete button */}
+                            <div>
+                                <button onClick={() => handleEditClick(post.id)}>
+                                    Редактировать
+                                </button>
+                                <button
+                                    onClick={() => handleDeleteClick(post.id)}
+                                    style={{marginLeft: '10px', backgroundColor: '#ff6b6b', color: 'white'}}
+                                >
+                                    Удалить
+                                </button>
+                            </div>
                         </>
                     )}
                 </div>
